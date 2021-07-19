@@ -1,10 +1,11 @@
 // Write your "projects" router here!
 
 const express = require('express');
-
+const logger = require('./projects-middleware');
 const Projects = require('./projects-model.js');
 
 const router = express.Router();
+router.use('/projects', logger);
 /*- [ ] `[GET] /api/projects`
   - Returns an array of projects as the body of the response.
   - If there are no projects it responds with an empty array.*/
