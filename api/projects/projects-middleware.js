@@ -1,6 +1,6 @@
 // add middlewares here related to projects
 
-const logger = (req, res, next) => {
+function logger(req, res, next) {
   console.log(
     `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
       'Origin'
@@ -8,6 +8,6 @@ const logger = (req, res, next) => {
   );
 
   next();
-};
+}
 
 module.exports = logger;

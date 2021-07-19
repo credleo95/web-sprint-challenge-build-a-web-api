@@ -1,9 +1,10 @@
 const express = require('express');
 const server = require('../server.js');
-
+const middleware = require('./actions-middlware');
 const Actions = require('./actions-model.js');
 
 const router = express.Router();
+router.use(middleware);
 /*
 - [] `[GET] /api/actions`
   - Returns an array of actions (or an empty array) as the body of the response.
@@ -51,7 +52,7 @@ router.post('/actions', (req, res) => {
   Actions.insert(newAction)
     .then((action) => {
       if (
-        !action.description_id ||
+        !action.project_id ||
         !action.description ||
         !action.notes ||
         !action.completed
