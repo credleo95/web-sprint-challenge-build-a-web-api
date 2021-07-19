@@ -3,6 +3,7 @@
 const express = require('express');
 
 const Projects = require('./projects-model.js');
+const Actions = require('../actions/actions-model.js');
 
 const router = express.Router();
 /*- [ ] `[GET] /api/projects`
@@ -23,17 +24,87 @@ router.get('/', (req, res) => {
 /*
 - [ ] `[GET] /api/projects/:id`
   - Returns a project with the given `id` as the body of the response.
-  - If there is no project with the given `id` it responds with a status code 404.
+  - If there is no project with the given `id` it responds with a status code 404.*/
+
+router.get('/:id', (req, res) => {
+  Projects.get(req.params.id)
+    .then((project) => {
+      if (project == undefined || null) {
+        return res
+          .status(404)
+          .json({ message: 'Project with specified id could not be found' });
+      }
+      return res.send(project);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+/*
 - [ ] `[POST] /api/projects`
   - Returns the newly created project as the body of the response.
   - If the request body is missing any of the required fields it responds with a status code 400.
+  */
+
+router.post('/', (req, res) => {
+  Projects.insert(req.body)
+    .then((project) => {
+      if (!project.name || !project.description) {
+        return res.status(400).json({
+          message: 'name or description is missing. Please resubmit.',
+        });
+      }
+      return res.status(201).json(project);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+/*
 - [ ] `[PUT] /api/projects/:id`
   - Returns the updated project as the body of the response.
   - If there is no project with the given `id` it responds with a status code 404.
   - If the request body is missing any of the required fields it responds with a status code 400.
+  */
+router.put('/:id', (req, res) => {
+  const changes = req.body;
+  Projects.update(req.params.id, changes)
+    .then((updatedProject) => {
+      if (!updatedProject.name || !updatedProject.description) {
+        return res
+          .status(400)
+          .json({ message: 'missing name or description. Please re-submit' });
+      }
+      if (!updatedProject) {
+        return res
+          .status(404)
+          .json({ message: 'Project with given id could not be found' });
+      }
+      return res.status(200).json(updatedProject);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+/*
 - [ ] `[DELETE] /api/projects/:id`
   - Returns no response body.
   - If there is no project with the given `id` it responds with a status code 404.
+  */
+router.delete('/:id', (req, res) => {
+  Projects.remove(req.params.id)
+    .then((project) => {
+      if (!project) {
+        return res.status(404);
+      }
+      return res.json(project);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+/*
 - [ ] `[GET] /api/projects/:id/actions`
   - Returns an array of actions (could be empty) belonging to a project with the given `id`.
   - If there is no project with the given `id` it responds with a status code 404.
