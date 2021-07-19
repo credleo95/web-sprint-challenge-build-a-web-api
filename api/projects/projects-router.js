@@ -3,13 +3,12 @@
 const express = require('express');
 
 const Projects = require('./projects-model.js');
-const Actions = require('../actions/actions-model.js');
 
 const router = express.Router();
 /*- [ ] `[GET] /api/projects`
   - Returns an array of projects as the body of the response.
   - If there are no projects it responds with an empty array.*/
-router.get('/', (req, res) => {
+router.get('/projects', (req, res) => {
   Projects.get()
     .then((projects) => {
       if (projects.length === 0) {
@@ -26,7 +25,7 @@ router.get('/', (req, res) => {
   - Returns a project with the given `id` as the body of the response.
   - If there is no project with the given `id` it responds with a status code 404.*/
 
-router.get('/:id', (req, res) => {
+router.get('/projects/:id', (req, res) => {
   Projects.get(req.params.id)
     .then((project) => {
       if (project == undefined || null) {
@@ -47,7 +46,7 @@ router.get('/:id', (req, res) => {
   - If the request body is missing any of the required fields it responds with a status code 400.
   */
 
-router.post('/', (req, res) => {
+router.post('/projects', (req, res) => {
   Projects.insert(req.body)
     .then((project) => {
       if (!project.name || !project.description) {
@@ -67,7 +66,7 @@ router.post('/', (req, res) => {
   - If there is no project with the given `id` it responds with a status code 404.
   - If the request body is missing any of the required fields it responds with a status code 400.
   */
-router.put('/:id', (req, res) => {
+router.put('/projects/:id', (req, res) => {
   const changes = req.body;
   Projects.update(req.params.id, changes)
     .then((updatedProject) => {
@@ -92,7 +91,7 @@ router.put('/:id', (req, res) => {
   - Returns no response body.
   - If there is no project with the given `id` it responds with a status code 404.
   */
-router.delete('/:id', (req, res) => {
+router.delete('/projects/:id', (req, res) => {
   Projects.remove(req.params.id)
     .then((project) => {
       if (!project) {
@@ -110,7 +109,7 @@ router.delete('/:id', (req, res) => {
   - If there is no project with the given `id` it responds with a status code 404.
 */
 
-router.get('/:id/actions', (req, res) => {
+router.get('/projects/:id/actions', (req, res) => {
   Projects.getProjectActions(req.params.id)
     .then((projectActions) => {
       if (!projectActions) {

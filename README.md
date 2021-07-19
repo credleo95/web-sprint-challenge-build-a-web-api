@@ -73,7 +73,7 @@ Inside `api/projects/projects-router.js` build the following endpoints:
 
 Inside `api/actions/actions-router.js` build endpoints for performing CRUD operations on _actions_:
 
-- [ ] `[GET] /api/actions`
+- [] `[GET] /api/actions`
   - Returns an array of actions (or an empty array) as the body of the response.
 - [ ] `[GET] /api/actions/:id`
   - Returns an action with the given `id` as the body of the response.
