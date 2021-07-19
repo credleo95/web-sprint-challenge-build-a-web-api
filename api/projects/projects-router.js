@@ -108,8 +108,22 @@ router.delete('/:id', (req, res) => {
 - [ ] `[GET] /api/projects/:id/actions`
   - Returns an array of actions (could be empty) belonging to a project with the given `id`.
   - If there is no project with the given `id` it responds with a status code 404.
+*/
 
+router.get('/:id/actions', (req, res) => {
+  Projects.getProjectActions(req.params.id)
+    .then((projectActions) => {
+      if (!projectActions) {
+        return res.status(404);
+      }
+      return res.json(projectActions);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
+/*
   ***HELPERS***
 
   - `get()`: resolves to an array of all the resources contained in the database. If you pass an `id` to this method it will return the resource with that id if one is found.
